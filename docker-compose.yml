@@ -1,0 +1,116 @@
+version: "3.8"
+
+services:
+  blitzvideoapi:
+    container_name: blitzvideo-api
+    build:
+      context: ./Blitzvideo-api
+      dockerfile: Dockerfile
+    ports:
+      - 8001:8000
+    volumes:
+      - ./Blitzvideo-api:/app
+    networks:
+      blitzvideo-network:
+        ipv4_address: 172.18.0.2
+
+  oauthapi:
+    container_name: oauth-api
+    image: ggmartinez/laravel:php-82
+    ports:
+      - 8000:8000
+    volumes:
+      - ./Oauth-api:/app
+    networks:
+      blitzvideo-network:
+        ipv4_address: 172.18.0.3
+
+  frontendvisualizer:
+    container_name: frontend-visualizer
+    build:
+      context: .
+      dockerfile: Dockerfile-Visualizer
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./Blitzvideo-Visualizer:/Blitzvideo-Visualizer/app
+    networks:
+      blitzvideo-network:
+        ipv4_address: 172.18.0.4
+
+  frontendcreadores:
+    container_name: frontend-creadores
+    build:
+      context: .
+      dockerfile: Dockerfile-Creadores
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./Blitzvideo-Creadores:/Blitzvideo-Creadores/app
+    networks:
+      blitzvideo-network:
+        ipv4_address: 172.18.0.5
+
+  frontendauth:
+    container_name: frontend-auth
+    build:
+      context: .
+      dockerfile: Dockerfile-Auth
+    ports:
+      - "3002:3002"
+    volumes:
+      - ./Blitzvideo-Auth:/Blitzvideo-Auth/app
+    networks:
+      blitzvideo-network:
+        ipv4_address: 172.18.0.6
+
+  mysql:
+    container_name: mysql
+    image: mysql:8
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_DATABASE=Blitzvideo
+      - MYSQL_ROOT_PASSWORD=root
+    volumes:
+      - ./mysql:/var/lib/mysql
+    networks:
+      blitzvideo-network:
+        ipv4_address: 172.18.0.7
+
+  minio:
+    container_name: minio
+    image: minio/minio
+    environment:
+      MINIO_ROOT_USER: admin
+      MINIO_ROOT_PASSWORD: Blitzcode123.
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - ./minio-data:/data
+    command: server /data --console-address ":9001"
+    networks:
+      blitzvideo-network:
+        ipv4_address: 172.18.0.8
+
+  smtp4dev:
+    container_name: smtp4dev
+    image: rnwood/smtp4dev:latest
+    ports:
+      - "2525:25"
+      - "3100:80"
+    volumes:
+      - smtp4dev-data:/smtp4dev
+    networks:
+      blitzvideo-network:
+        ipv4_address: 172.18.0.9
+
+networks:
+  blitzvideo-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.18.0.0/24
+volumes:
+  smtp4dev-data:        

@@ -4,7 +4,7 @@ services:
   blitzvideoapi:
     container_name: blitzvideo-api
     build:
-      context: ./Blitzvideo-api
+      context: .
       dockerfile: Dockerfile
     ports:
       - 8001:8000
@@ -16,7 +16,9 @@ services:
 
   oauthapi:
     container_name: oauth-api
-    image: ggmartinez/laravel:php-82
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
       - 8000:8000
     volumes:
@@ -106,11 +108,39 @@ services:
       blitzvideo-network:
         ipv4_address: 172.18.0.9
 
+  backoffice:
+    container_name: backoffice
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8002:8000
+    volumes:
+      - ./Backoffice:/app
+    networks:
+      blitzvideo-network:
+        ipv4_address: 172.18.0.10
+
+  mysql-backoffice:
+    container_name: mysql-backoffice
+    image: mysql:8
+    ports:
+      - 3308:3306
+    environment:
+      - MYSQL_DATABASE=backoffice
+      - MYSQL_ROOT_PASSWORD=root
+    volumes:
+      - ./mysql-backoffice:/var/lib/mysql
+    networks:
+      blitzvideo-network:
+        ipv4_address: 172.18.0.11
+
 networks:
   blitzvideo-network:
     driver: bridge
     ipam:
       config:
         - subnet: 172.18.0.0/24
+
 volumes:
-  smtp4dev-data:        
+  smtp4dev-data:

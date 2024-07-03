@@ -1,7 +1,7 @@
 #!/bin/bash
 
 CONTAINER_NAME="mysql"
-MYSQL_CMD="mysql -u root -proot -D Blitzvideo -se \"SELECT secret FROM oauth_clients WHERE id = 1;\""
+MYSQL_CMD="mysql -u root -proot -D blitzvideo -se \"SELECT secret FROM oauth_clients WHERE id = 1;\""
 CLIENT_SECRET=$(sudo docker exec -ti $CONTAINER_NAME bash -c "$MYSQL_CMD" | tail -n 1 | tr -d '\r')
 AUTH_SERVICE_FILE="Blitzvideo-Auth/src/app/servicios/auth.service.ts"
 

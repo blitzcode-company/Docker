@@ -31,7 +31,7 @@ services:
       context: .
       dockerfile: Dockerfile-Visualizer
     ports:
-      - "3000:3000"
+      - "3000:80"
     volumes:
       - ./Blitzvideo-Visualizer:/Blitzvideo-Visualizer/app
     networks:
@@ -44,7 +44,7 @@ services:
       context: .
       dockerfile: Dockerfile-Creadores
     ports:
-      - "3001:3001"
+      - "3001:80"
     volumes:
       - ./Blitzvideo-Creadores:/Blitzvideo-Creadores/app
     networks:
@@ -57,7 +57,7 @@ services:
       context: .
       dockerfile: Dockerfile-Auth
     ports:
-      - "3002:3002"
+      - "3002:80"
     volumes:
       - ./Blitzvideo-Auth:/Blitzvideo-Auth/app
     networks:

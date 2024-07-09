@@ -1,3 +1,5 @@
+# Dockerfile-Auth
+
 # Etapa de construcción del frontend
 FROM node:20-alpine AS build
 
@@ -5,22 +7,22 @@ FROM node:20-alpine AS build
 WORKDIR /app
 
 # Copiar package.json y package-lock.json
-COPY package*.json ./
+COPY Blitzvideo-Auth/package*.json ./
 
 # Instalar dependencias
 RUN npm install
 
 # Copiar todo el código fuente
-COPY . .
+COPY Blitzvideo-Auth/ .
 
 # Construir la aplicación Angular
-RUN npm run build -- --output-path=dist
+RUN npm run build  # Este comando debe generar dist/b-auth/browser
 
 # Etapa de producción
 FROM nginx:alpine
 
 # Copiar los archivos construidos desde la etapa de construcción
-COPY --from=build /app/dist /usr/share/nginx/html
+COPY --from=build /app/dist/blitzvideo-auth/browser /usr/share/nginx/html
 
 # Exponer el puerto 80
 EXPOSE 80

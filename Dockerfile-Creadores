@@ -1,10 +1,29 @@
 # Etapa de construcción del frontend
-FROM node:20-alpine
+FROM node:20-alpine AS build
 
 # Establecer el directorio de trabajo
-WORKDIR /Blitzvideo-Creadores/app
+WORKDIR /app
 
-RUN echo 'npm install' > /start.sh
-RUN echo 'node_modules/@angular/cli/bin/ng.js serve --host 0.0.0.0 --port 3001' >> /start.sh
+# Copiar package.json y package-lock.json
+COPY package*.json ./
 
-CMD sh /start.sh
+# Instalar dependencias
+RUN npm install
+
+# Copiar todo el código fuente
+COPY . .
+
+# Construir la aplicación Angular
+RUN npm run build -- --output-path=dist
+
+# Etapa de producción
+FROM nginx:alpine
+
+# Copiar los archivos construidos desde la etapa de construcción
+COPY --from=build /app/dist /usr/share/nginx/html
+
+# Exponer el puerto 80
+EXPOSE 80
+
+# Comando por defecto para ejecutar nginx
+CMD ["nginx", "-g", "daemon off;"]

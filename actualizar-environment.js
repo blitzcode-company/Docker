@@ -1,16 +1,24 @@
 const fs = require('fs');
 const path = require('path');
 
-const newIp = process.argv[2];
-if (!newIp) {
-  console.error('Por favor, proporciona una nueva IP o dominio como argumento.');
+const search = process.argv[2];
+const replace = process.argv[3];
+
+if (!search || !replace) {
+  console.error('Por favor, proporciona la cadena a buscar y la nueva cadena como argumentos.');
+  console.error('Uso: node update-environments.js "cadena_a_buscar" "nueva_cadena"');
   process.exit(1);
 }
 
 const projects = ['Blitzvideo-Visualizer', 'Blitzvideo-Auth', 'Blitzvideo-Creadores'];
 const environmentFiles = ['environment.ts', 'environment.prod.ts'];
 
-const ipRegex = /http:\/\/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}|http:\/\/localhost/g;
+const escapeRegExp = (string) => {
+  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+};
+
+const searchPattern = escapeRegExp(search);
+const searchRegex = new RegExp(searchPattern, 'g');
 
 projects.forEach((project) => {
   const basePath = path.join(__dirname, project, 'src', 'environments');
@@ -23,7 +31,7 @@ projects.forEach((project) => {
         return;
       }
 
-      const result = data.replace(ipRegex, `http://${newIp}`);
+      const result = data.replace(searchRegex, replace);
 
       fs.writeFile(filePath, result, 'utf8', (err) => {
         if (err) {

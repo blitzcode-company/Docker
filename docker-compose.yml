@@ -133,6 +133,45 @@ services:
       blitzvideo-network:
         ipv4_address: 172.18.0.11
 
+  blitzvideo-api-moderadores:
+    container_name: blitzvideo-api-moderadores
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8004:8000
+    volumes:
+      - ./Blitzvideo-ApiModeradores:/app
+    networks:
+      blitzvideo-network:
+        ipv4_address: 172.18.0.12
+  blitzvideo-api-pagos:
+    container_name: blitzvideo-api-pagos
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8003:8000
+    volumes:
+      - ./api-pagos:/app
+    networks:
+      blitzvideo-network:
+        ipv4_address: 172.18.0.14      
+
+  mysql-moderacion:
+    container_name: mysql-moderacion
+    image: mysql:8
+    ports:
+      - 3309:3306
+    environment:
+      - MYSQL_DATABASE=blitzvideo_moderadores
+      - MYSQL_ROOT_PASSWORD=root
+    volumes:
+      - ./mysql-moderacion:/var/lib/mysql
+    networks:
+      blitzvideo-network:
+        ipv4_address: 172.18.0.13
+        
 networks:
   blitzvideo-network:
     driver: bridge

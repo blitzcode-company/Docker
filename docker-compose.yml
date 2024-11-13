@@ -157,7 +157,30 @@ services:
     networks:
       blitzvideo-network:
         ipv4_address: 172.18.0.14      
-
+  frontendmoderadores:
+      container_name: frontend-moderadores
+      build:
+        context: .
+        dockerfile: Dockerfile-Moderadores
+      ports:
+        - "3003:3003"
+      volumes:
+        - ./Blitzvideo-ModeradoresVisualizer:/Blitzvideo-ModeradoresVisualizer/app
+      networks:
+        blitzvideo-network:
+          ipv4_address: 172.18.0.15
+  oauthapi-moderadores:
+      container_name: oauth-apimoderadores
+      build:
+        context: .
+        dockerfile: Dockerfile
+      ports:
+        - 8005:8000
+      volumes:
+        - ./OauthApi-Moderadores:/app
+      networks:
+        blitzvideo-network:
+          ipv4_address: 172.18.0.16       
   mysql-moderacion:
     container_name: mysql-moderacion
     image: mysql:8

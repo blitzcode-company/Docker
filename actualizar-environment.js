@@ -10,7 +10,7 @@ if (!search || !replace) {
   process.exit(1);
 }
 
-const projects = ['Blitzvideo-Visualizer', 'Blitzvideo-Auth', 'Blitzvideo-Creadores'];
+const projects = ['Blitzvideo-Visualizer', 'Blitzvideo-Auth', 'Blitzvideo-Creadores', 'Blitzvideo-ModeradoresVisualizer'];
 const environmentFiles = ['environment.ts', 'environment.prod.ts'];
 
 const escapeRegExp = (string) => {

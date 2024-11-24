@@ -157,19 +157,7 @@ services:
     networks:
       blitzvideo-network:
         ipv4_address: 172.18.0.14      
-  frontendmoderadores:
-      container_name: frontend-moderadores
-      build:
-        context: .
-        dockerfile: Dockerfile-Moderadores
-      ports:
-        - "3003:3003"
-      volumes:
-        - ./Blitzvideo-ModeradoresVisualizer:/Blitzvideo-ModeradoresVisualizer/app
-      networks:
-        blitzvideo-network:
-          ipv4_address: 172.18.0.15
- 
+
   mysql-moderacion:
     container_name: mysql-moderacion
     image: mysql:8
@@ -183,7 +171,21 @@ services:
     networks:
       blitzvideo-network:
         ipv4_address: 172.18.0.13
-        
+  
+  nginx-rtmp:
+    image: tiangolo/nginx-rtmp:latest
+    container_name: nginx-rtmp
+    ports:
+      - "1935:1935"
+      - "8080:80"
+    volumes:
+      - ./Blitzvideo-api/nginx.conf:/etc/nginx/nginx.conf
+      - ./hls:/mnt/hls
+    networks:
+      blitzvideo-network:
+        ipv4_address: 172.18.0.15
+    restart: always
+
 networks:
   blitzvideo-network:
     driver: bridge

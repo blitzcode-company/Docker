@@ -1,0 +1,4 @@
+FROM tiangolo/nginx-rtmp:latest
+RUN mkdir -p /var/streams/records && chmod -R 777 /var/streams/records
+EXPOSE 1935 8080
+CMD ["nginx", "-g", "daemon off;"]

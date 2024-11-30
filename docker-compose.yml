@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   blitzvideoapi:
     container_name: blitzvideo-api
@@ -145,6 +147,7 @@ services:
     networks:
       blitzvideo-network:
         ipv4_address: 172.18.0.12
+
   blitzvideo-api-pagos:
     container_name: blitzvideo-api-pagos
     build:
@@ -156,7 +159,7 @@ services:
       - ./api-pagos:/app
     networks:
       blitzvideo-network:
-        ipv4_address: 172.18.0.14      
+        ipv4_address: 172.18.0.14
 
   mysql-moderacion:
     container_name: mysql-moderacion
@@ -171,9 +174,11 @@ services:
     networks:
       blitzvideo-network:
         ipv4_address: 172.18.0.13
-  
+
   nginx-rtmp:
-    image: tiangolo/nginx-rtmp:latest
+    build:
+      context: .
+      dockerfile: Dockerfile-rtmp
     container_name: nginx-rtmp
     ports:
       - "1935:1935"
@@ -181,6 +186,7 @@ services:
     volumes:
       - ./Blitzvideo-api/nginx.conf:/etc/nginx/nginx.conf
       - ./hls:/mnt/hls
+      - ./Blitzvideo-api/streams/records:/var/streams/records
     networks:
       blitzvideo-network:
         ipv4_address: 172.18.0.15

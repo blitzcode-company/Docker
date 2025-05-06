@@ -1,4 +1,13 @@
 FROM tiangolo/nginx-rtmp:latest
+
 RUN mkdir -p /var/streams/records && chmod -R 777 /var/streams/records
+
+RUN apt-get update && apt-get install -y wget && \
+    wget https://dl.min.io/client/mc/release/linux-amd64/mc && \
+    chmod +x mc && mv mc /usr/local/bin/ && \
+    rm -rf /var/lib/apt/lists/* 
+
+RUN mkdir -p /usr/local/bin/scripts
+
 EXPOSE 1935 8080
 CMD ["nginx", "-g", "daemon off;"]

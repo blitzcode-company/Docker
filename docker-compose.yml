@@ -185,8 +185,7 @@ services:
       - "8080:80"
     volumes:
       - ./Blitzvideo-api/nginx.conf:/etc/nginx/nginx.conf
-      - ./hls:/mnt/hls
-      - ./Blitzvideo-api/streams/records:/var/streams/records
+      - ./Blitzvideo-api/scripts/upload_to_minio.sh:/usr/local/bin/scripts/upload_to_minio.sh
     networks:
       blitzvideo-network:
         ipv4_address: 172.18.0.15

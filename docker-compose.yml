@@ -207,20 +207,6 @@ services:
       blitzvideo-network:
         ipv4_address: 172.18.0.14
 
-  mysql-moderacion:
-    container_name: mysql-moderacion
-    image: mysql:8
-    ports:
-      - 3309:3306
-    environment:
-      - MYSQL_DATABASE=blitzvideo_moderadores
-      - MYSQL_ROOT_PASSWORD=root
-    volumes:
-      - ./mysql-moderacion:/var/lib/mysql
-    networks:
-      blitzvideo-network:
-        ipv4_address: 172.18.0.13
-
   nginx-rtmp:
     build:
       context: .
